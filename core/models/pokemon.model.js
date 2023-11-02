@@ -3,35 +3,34 @@ const { Schema, model } = require('mongoose');
 const PokemonSchema = new Schema({
   name: {
     type: String,
-    require: true
+    required: true
   },
   image: {
-    type: String,
-    require: true
+    type: String
   },
   attack: {
     type: Number,
-    require: true,
-    min: [0, 'Attack can not be lower than zero']
+    required: true,
+    min: 0
   },
   defense: {
     type: Number,
-    require: true,
-    min: [0, 'Defense can not be lower than zero']
+    required: true,
+    min: 0
   },
   hp: {
     type: Number,
-    require: true,
-    min: [0, 'Health points can not be lower than zero']
+    required: true,
+    min: 0
   },
   type: {
     type: String,
-    require: true
+    required: true
   },
-  idAuthor: {
-    type: String,
-    require: true
-  }
+  // idAuthor: {
+  //   type: String,
+  //   required: true
+  // }
 });
 
 PokemonSchema.method('toJSON', function() {
