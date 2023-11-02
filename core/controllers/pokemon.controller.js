@@ -59,6 +59,21 @@ async function createPokemon(req, res) {
   }
 }
 
+async function updatePokemon(req, res) {
+  const { pokemonId } = req.params;
+  const data = req.body;
+  if (!Types.ObjectId.isValid(pokemonId)) {
+    return res.status(400).json({ message: 'Invalid Id' });
+  }
+  const id = new Types.ObjectId(pokemonId);
+  const document = await Pokemon.countDocuments({ _id: id });
+  if (document === 0) {
+    return res.status(404).json({ message: 'Pokemon not found' });
+  }
+  const updatedPokemon = await Pokemon.findByIdAndUpdate(id, data);
+  res.json(updatedPokemon);
+}
+
 async function deletePokemonById(req, res) {
   const { pokemonId } = req.params;
   try {
@@ -82,5 +97,6 @@ module.exports = {
   getPokemons,
   createPokemon,
   deletePokemonById,
-  getPokemonById
+  getPokemonById,
+  updatePokemon
 }
