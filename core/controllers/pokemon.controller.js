@@ -15,8 +15,11 @@ async function getPokemons(req, res) {
       .limit(5)
       .skip((page - 1) * 5);
     const hasPrevious = parseInt(page) !== 1 && parseInt(page) >= 0;
-    const hasNext = (parseInt(page) * 5) <= count;
-    const nextPageUrl = `${req.protocol}://${req.get('host')}${req.baseUrl}?page=${parseInt(page) + 1}`;
+    const hasNext = (parseInt(page) * 5) < count;
+    let nextPageUrl = `${req.protocol}://${req.get('host')}${req.baseUrl}?page=${parseInt(page) + 1}`;
+    if (name) {
+      nextPageUrl += `&name=${name}`;
+    }
     res.json({
       count,
       hasPrevious,
