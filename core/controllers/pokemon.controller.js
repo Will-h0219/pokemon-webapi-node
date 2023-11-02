@@ -1,7 +1,7 @@
 const { Types } = require('mongoose');
 const Pokemon = require('../models/pokemon.model');
 
-const getPokemons = async (req, res) => {
+async function getPokemons(req, res) {
   let page = req.query.page || 1;
   page = isNaN(page) || parseInt(page) < 0 ? 1 : page;
   try {
@@ -25,7 +25,7 @@ const getPokemons = async (req, res) => {
   }
 }
 
-const createPokemon = async (req, res) => {
+async function createPokemon(req, res) {
   const pokemon = new Pokemon(req.body);
   try {
     const pokemonDb = await pokemon.save();
@@ -38,7 +38,7 @@ const createPokemon = async (req, res) => {
   }
 }
 
-const deletePokemonById = async (req, res) => {
+async function deletePokemonById(req, res) {
   const { pokemonId } = req.params;
   try {
     if (!Types.ObjectId.isValid(pokemonId)) {
