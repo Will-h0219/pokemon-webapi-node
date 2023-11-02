@@ -1,3 +1,4 @@
+const { Types } = require('mongoose');
 const Pokemon = require('../models/pokemon.model');
 
 const getPokemons = async (req, res) => {
@@ -37,7 +38,27 @@ const createPokemon = async (req, res) => {
   }
 }
 
+const deletePokemonById = async (req, res) => {
+  const { pokemonId } = req.params;
+  try {
+    if (!Types.ObjectId.isValid(pokemonId)) {
+      return res.status(400).json({ message: 'Invalid Id' });
+    }
+    const id = new Types.ObjectId(pokemonId);
+    const document = await Pokemon.countDocuments({ _id: id });
+    if (document === 0) {
+      return res.status(404).json({ message: 'Pokemon not found' });
+    }
+    await Pokemon.findByIdAndDelete(id);
+    res.json();
+  } catch (error) {
+    console.log(error);
+    res.status(500).json({ message: "We couldn't process your request" });
+  }
+}
+
 module.exports = {
   getPokemons,
-  createPokemon
+  createPokemon,
+  deletePokemonById
 }

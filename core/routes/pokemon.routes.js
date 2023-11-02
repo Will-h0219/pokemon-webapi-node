@@ -4,7 +4,7 @@
 const { Router } = require('express');
 const { check } = require('express-validator');
 const { validateFields } = require('../../middlewares/validate-fields.middleware');
-const { getPokemons, createPokemon } = require('../controllers/pokemon.controller');
+const { getPokemons, createPokemon, deletePokemonById } = require('../controllers/pokemon.controller');
 
 const router = Router();
 
@@ -20,5 +20,6 @@ router.post('/',
   ],
   createPokemon
 );
+router.delete('/:pokemonId', deletePokemonById);
 
 module.exports = router;
