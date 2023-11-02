@@ -4,9 +4,14 @@ const Pokemon = require('../models/pokemon.model');
 async function getPokemons(req, res) {
   let page = req.query.page || 1;
   page = isNaN(page) || parseInt(page) < 0 ? 1 : page;
+  const { name } = req.query;
+  const query = {};
+  if (name) {
+    query.name = { $regex: '.*' + name + '.*', $options: 'i' };
+  }
   try {
-    const count = await Pokemon.countDocuments();
-    const results = await Pokemon.find()
+    const count = await Pokemon.countDocuments(query);
+    const results = await Pokemon.find(query)
       .limit(5)
       .skip((page - 1) * 5);
     const hasPrevious = parseInt(page) !== 1 && parseInt(page) >= 0;
@@ -23,6 +28,19 @@ async function getPokemons(req, res) {
     console.log(error);
     res.status(500).json({ message: "We couldn't process your request." });
   }
+}
+
+async function getPokemonById(req, res) {
+  const { pokemonId } = req.params;
+  if (!Types.ObjectId.isValid(pokemonId)) {
+    return res.status(400).json({ message: 'Invalid Id' });
+  }
+  const id = new Types.ObjectId(pokemonId);
+  const pokemonDb = await Pokemon.findById(id);
+  if (!pokemonDb) {
+    return res.status(404).json({ message: 'Pokemon not found' });
+  }
+  res.json(pokemonDb);
 }
 
 async function createPokemon(req, res) {
@@ -60,5 +78,6 @@ async function deletePokemonById(req, res) {
 module.exports = {
   getPokemons,
   createPokemon,
-  deletePokemonById
+  deletePokemonById,
+  getPokemonById
 }

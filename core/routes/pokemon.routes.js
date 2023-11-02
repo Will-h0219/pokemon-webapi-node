@@ -4,11 +4,17 @@
 const { Router } = require('express');
 const { check } = require('express-validator');
 const { validateFields } = require('../../middlewares/validate-fields.middleware');
-const { getPokemons, createPokemon, deletePokemonById } = require('../controllers/pokemon.controller');
+const {
+  getPokemons,
+  createPokemon,
+  deletePokemonById,
+  getPokemonById
+} = require('../controllers/pokemon.controller');
 
 const router = Router();
 
 router.get('/', getPokemons);
+router.get('/:pokemonId', getPokemonById);
 router.post('/',
   [
     check('name', 'El nombre es obligatorio').notEmpty(),

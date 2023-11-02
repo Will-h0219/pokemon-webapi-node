@@ -26,15 +26,12 @@ const PokemonSchema = new Schema({
   type: {
     type: String,
     required: true
-  },
-  // idAuthor: {
-  //   type: String,
-  //   required: true
-  // }
+  }
 });
 
 PokemonSchema.method('toJSON', function() {
-  const { __v, ...object } = this.toObject();
+  const { __v, _id, ...object } = this.toObject();
+  object['id'] = _id;
   return object;
 });
 
